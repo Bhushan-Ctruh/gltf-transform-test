@@ -40,6 +40,6 @@ worker.onmessage = (e) => {
   const a = document.createElement("a");
   const url = window.URL.createObjectURL(blob);
   a.href = url;
-  a.download = "downloadnewDracofromworker.glb";
+  a.download = "downloadnewDracoSimplifyTexComfromworker.glb";
   a.click();
 };
