@@ -4,6 +4,7 @@ import "./style.css";
 const worker = new Worker("optimizer.js", { type: "module" });
 
 const input = document.getElementById("input");
+const fileNameInput = document.getElementById("file-name");
 
 const storage = new Storage();
 
@@ -40,6 +41,6 @@ worker.onmessage = (e) => {
   const a = document.createElement("a");
   const url = window.URL.createObjectURL(blob);
   a.href = url;
-  a.download = "downloadnewDracoSimplifyTexComfromworker.glb";
+  a.download = `${fileNameInput.value}.glb`;
   a.click();
 };

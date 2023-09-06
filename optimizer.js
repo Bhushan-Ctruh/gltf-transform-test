@@ -14,13 +14,10 @@ const io = new WebIO()
 
 const storage = new Storage();
 
-const canvas = new OffscreenCanvas(64, 64);
-const context = canvas.getContext("2d");
-
-const resizedCanvas = new OffscreenCanvas(512, 512);
-const resizedCanvasContext = resizedCanvas.getContext("2d");
-
-console.log(canvas, context);
+// const textureTargetSize = {
+//   width: 2048,
+//   height: 2048,
+// };
 
 self.addEventListener("message", async (e) => {
   const data = e.data;
@@ -39,7 +36,7 @@ self.addEventListener("message", async (e) => {
 
       simplify({ simplifier: MeshoptSimplifier, ratio: 0, error: 1 }),
 
-      resizeTextures(),
+      // resizeTextures(),
 
       draco()
     );
@@ -49,23 +46,29 @@ self.addEventListener("message", async (e) => {
   }
 });
 
-function resizeTextures(e) {
-  return async (document) => {
-    for (const texture of document.getRoot().listTextures()) {
-      console.log(texture.getImage(), "BEFORE");
-      const [textureWidth, textureHeight] = texture.getSize();
-      canvas.width = textureWidth;
-      canvas.height = textureHeight;
-      const textureBlob = new Blob([texture.getImage()]);
-      const imageBitMap = await createImageBitmap(textureBlob);
-      context.drawImage(imageBitMap, 0, 0, textureWidth, textureHeight);
-      resizedCanvasContext.drawImage(canvas, 0, 0, 64, 64);
-      const resizedTextureBlob = await resizedCanvas.convertToBlob({
-        type: "image/jpeg",
-      });
-      const resizedTextureArrayBuffer = await resizedTextureBlob.arrayBuffer();
-      const newResizedTexture = new Uint8Array(resizedTextureArrayBuffer);
-      texture.setImage(newResizedTexture);
-    }
-  };
-}
+// function resizeTextures(e) {
+//   return async (document) => {
+//     for (const texture of document.getRoot().listTextures()) {
+//       const textureBlob = new Blob([texture.getImage()]);
+//       const imageBitMap = await createImageBitmap(textureBlob);
+//       const resizedCanvas = new OffscreenCanvas(
+//         textureTargetSize.width,
+//         textureTargetSize.height
+//       );
+//       const resizedCanvasContext = resizedCanvas.getContext("2d");
+//       resizedCanvasContext.drawImage(
+//         imageBitMap,
+//         0,
+//         0,
+//         textureTargetSize.width,
+//         textureTargetSize.height
+//       );
+//       const resizedTextureBlob = await resizedCanvas.convertToBlob({
+//         type: texture.getMimeType(),
+//       });
+//       const resizedTextureArrayBuffer = await resizedTextureBlob.arrayBuffer();
+//       const newResizedTexture = new Uint8Array(resizedTextureArrayBuffer);
+//       texture.setImage(newResizedTexture);
+//     }
+//   };
+// }
